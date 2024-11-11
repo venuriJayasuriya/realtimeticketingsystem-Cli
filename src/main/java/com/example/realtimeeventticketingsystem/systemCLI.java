@@ -1,17 +1,38 @@
 package com.example.realtimeeventticketingsystem;
 
-import java.util.Scanner;
-
 public class systemCLI {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Real-time Event Ticketing System");
-        System.out.println("01.Total Number of Tickets (totalTickets)");
-        System.out.println("02.Ticket Release Rate (ticketReleaseRate)");
-        System.out.println("03.Customer Retrieval Rate (customerRetrievalRate)");
-        System.out.println("04.Maximum Ticket Capacity (maxTicketCapacity)");
+    private int totalTickets;
+    private double ticketReleaseRate;
+    private double customerRetrievalRate;
+    private int maxTicketCapacity;
+
+    public systemCLI() { }
 
 
+    public void setTotalTickets(int totalTickets) {
+        this.totalTickets = totalTickets;
+    }
+    public void setTicketReleaseRate(double ticketReleaseRate) {
+        this.ticketReleaseRate = ticketReleaseRate;
+    }
+    public void setCustomerRetrievalRate(double customerRetrievalRate) {
+        this.customerRetrievalRate = customerRetrievalRate;
+    }
+    public void setMaxTicketCapacity(int maxTicketCapacity) {
+        this.maxTicketCapacity = maxTicketCapacity;
+    }
+
+    public int getTotalTickets() {
+        return totalTickets;
+    }
+    public double getTicketReleaseRate() {
+        return ticketReleaseRate;
+    }
+    public double getCustomerRetrievalRate() {
+        return customerRetrievalRate;
+    }
+    public int getMaxTicketCapacity() {
+        return maxTicketCapacity;
     }
 
 }
