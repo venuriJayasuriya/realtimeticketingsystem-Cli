@@ -10,7 +10,13 @@ public class systemCLI {
 
 
     public void setTotalTickets(int totalTickets) {
-        this.totalTickets = totalTickets;
+        if (totalTickets >= 0) {
+            this.totalTickets = totalTickets;
+        }
+        else {
+            System.out.println("Total tickets cannot be negative");
+            Main.prompts();
+        }
     }
     public void setTicketReleaseRate(double ticketReleaseRate) {
         this.ticketReleaseRate = ticketReleaseRate;
@@ -35,4 +41,13 @@ public class systemCLI {
         return maxTicketCapacity;
     }
 
+    @Override
+    public String toString() {
+        return "Ticket information {" +
+                "totalTickets=" + totalTickets +
+                ", ticketReleaseRate=" + ticketReleaseRate +
+                ", customerRetrievalRate=" + customerRetrievalRate +
+                ", maxTicketCapacity=" + maxTicketCapacity +
+                '}';
+    }
 }

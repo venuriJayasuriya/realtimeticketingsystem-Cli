@@ -4,6 +4,12 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+        System.out.println("Welcome to Realtime Event Ticketing System!");
+        prompts();
+    }
+
+    public static void prompts() {
         Scanner scanner = new Scanner(System.in);
         systemCLI ticketInfo = new systemCLI();
         System.out.println("Please enter the total number of tickets for the event:");
@@ -14,8 +20,6 @@ public class Main {
         ticketInfo.setCustomerRetrievalRate(scanner.nextDouble());
         System.out.println("Please enter the max number of ticket capacity for the event:");
         ticketInfo.setMaxTicketCapacity(scanner.nextInt());
-
-
-
+        System.out.println(ticketInfo);
     }
 }
