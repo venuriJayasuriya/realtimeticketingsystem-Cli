@@ -3,18 +3,10 @@ package com.example.realtimeeventticketingsystem;
 import java.util.Scanner;
 
 public class systemCLI {
-    private int totalTickets;
-    private double ticketReleaseRate;
-    private double customerRetrievalRate;
-    private int maxTicketCapacity;
-
-    public systemCLI() {
-
-    }
 
     public static void prompts() {
         Scanner scanner = new Scanner(System.in);
-        systemCLI ticketInfo = new systemCLI();
+        systemConfig ticketInfo = new systemConfig();
 
         System.out.println("Please enter the total number of tickets for the event:");
         ticketInfo.setTotalTickets(intValidator(scanner));
@@ -25,32 +17,8 @@ public class systemCLI {
         System.out.println("Please enter the max number of ticket capacity for the event:");
         ticketInfo.setMaxTicketCapacity(intValidator(scanner));
 
+        System.out.println();
         System.out.println(ticketInfo);
-    }
-    public void setTotalTickets(int totalTickets) {
-        this.totalTickets = totalTickets;
-    }
-    public void setTicketReleaseRate(double ticketReleaseRate) {
-        this.ticketReleaseRate = ticketReleaseRate;
-    }
-    public void setCustomerRetrievalRate(double customerRetrievalRate) {
-        this.customerRetrievalRate = customerRetrievalRate;
-    }
-    public void setMaxTicketCapacity(int maxTicketCapacity) {
-        this.maxTicketCapacity = maxTicketCapacity;
-    }
-
-    public int getTotalTickets() {
-        return totalTickets;
-    }
-    public double getTicketReleaseRate() {
-        return ticketReleaseRate;
-    }
-    public double getCustomerRetrievalRate() {
-        return customerRetrievalRate;
-    }
-    public int getMaxTicketCapacity() {
-        return maxTicketCapacity;
     }
 
     private static int intValidator(Scanner scanner) {
@@ -87,13 +55,5 @@ public class systemCLI {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Ticket information {" +
-                "totalTickets=" + totalTickets +
-                ", ticketReleaseRate=" + ticketReleaseRate +
-                ", customerRetrievalRate=" + customerRetrievalRate +
-                ", maxTicketCapacity=" + maxTicketCapacity +
-                '}';
-    }
+
 }
