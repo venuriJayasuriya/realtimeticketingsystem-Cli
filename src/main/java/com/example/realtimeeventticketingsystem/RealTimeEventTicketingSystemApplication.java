@@ -8,6 +8,6 @@ public class RealTimeEventTicketingSystemApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(RealTimeEventTicketingSystemApplication.class, args);
-    }
 
+    }
 }

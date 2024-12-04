@@ -4,21 +4,36 @@ import java.util.Scanner;
 
 public class systemCLI {
 
-    public static void prompts() {
+    private systemConfig config;
+
+    public systemCLI() {
+
+    }
+
+    public void prompts() {
         Scanner scanner = new Scanner(System.in);
-        systemConfig ticketInfo = new systemConfig();
+
+        systemConfig config = new systemConfig();
 
         System.out.println("Please enter the total number of tickets for the event:");
-        ticketInfo.setTotalTickets(intValidator(scanner));
+        config.setTotalTickets(intValidator(scanner));
         System.out.println("Please enter the rate of ticket release for the event:");
-        ticketInfo.setTicketReleaseRate(doubleValidator(scanner));
+        config.setTicketReleaseRate(doubleValidator(scanner));
         System.out.println("Please enter the customer retrieval rate for the event:");
-        ticketInfo.setCustomerRetrievalRate(doubleValidator(scanner));
+        config.setCustomerRetrievalRate(doubleValidator(scanner));
         System.out.println("Please enter the max number of ticket capacity for the event:");
-        ticketInfo.setMaxTicketCapacity(intValidator(scanner));
+        config.setMaxTicketCapacity(intValidator(scanner));
 
         System.out.println();
-        System.out.println(ticketInfo);
+        System.out.println(config);
+
+        config.saveToJson();
+
+        systemConfig loadedTicketInfo = config.loadFromJson();
+        if (loadedTicketInfo != null) {
+            System.out.println("Loaded ticketing information from JSON:");
+            System.out.println(loadedTicketInfo);
+        }
     }
 
     private static int intValidator(Scanner scanner) {
