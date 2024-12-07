@@ -3,20 +3,18 @@ package com.example.realtimeeventticketingsystem;
 public class Vendor implements Runnable {
     private final TicketPool ticketPool;
     private final int ticketReleaseRate;
-    private final int maxTickets;
+    private final int vendorId;
 
-    public Vendor(TicketPool ticketPool, int ticketReleaseRate, int maxTickets) {
+    public Vendor(TicketPool ticketPool, int ticketReleaseRate, int vendorId) {
         this.ticketPool = ticketPool;
         this.ticketReleaseRate = ticketReleaseRate;
-        this.maxTickets = maxTickets;
+        this.vendorId = vendorId;
     }
 
     @Override
     public void run() {
-        int ticketId = 1;
-        while (ticketId <= maxTickets) {
-            ticketPool.addTickets(ticketId);
-            ticketId++;
+        while (!ticketPool.isTicketSoldOut()) {
+            ticketPool.addTickets(vendorId);  // Add a ticket to the pool
             try {
                 Thread.sleep(ticketReleaseRate * 1000); // Convert seconds to milliseconds here
             } catch (InterruptedException e) {
@@ -24,6 +22,6 @@ public class Vendor implements Runnable {
                 System.out.println("Vendor thread interrupted: " + e.getMessage());
             }
         }
-        System.out.println(Thread.currentThread().getName() + " has finished releasing tickets.");
+        System.out.println("Vendor " + vendorId + " has finished releasing tickets.");
     }
 }
