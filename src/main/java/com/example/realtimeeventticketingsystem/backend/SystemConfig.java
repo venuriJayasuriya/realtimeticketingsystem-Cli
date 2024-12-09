@@ -1,4 +1,7 @@
-package com.example.realtimeeventticketingsystem;
+package com.example.realtimeeventticketingsystem.backend;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,6 +11,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class SystemConfig {
+    private static final Logger logger = LogManager.getLogger(SystemConfig.class);
+
     private int maxTicketCapacity; //the maximum number of tickets the event can hold
     private int totalTickets; //the number of tickets at the beginning
     private int vendorCount;
@@ -54,7 +59,7 @@ public class SystemConfig {
     @Override
     public String toString() {
         return  "-------------------------------------------------------------\nTicket information of the Event\n-------------------------------------------------------------\n"+
-                "Maximum Ticket Capacity event can hold             = " + maxTicketCapacity +
+                "Maximum Ticket Capacity event can hold            = " + maxTicketCapacity +
                 "\nTotal Tickets in the Ticket pool at the beginning = " + totalTickets +
                 "\nNumber of Vendors selling tickets                 = " + vendorCount +
                 "\nTicket Released Rate by Vendors(in seconds)       = " + ticketReleaseRate +
@@ -66,9 +71,9 @@ public class SystemConfig {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter("ticket_info.json")) {
             gson.toJson(this, writer);  // Serialize the object and save to a file
-            System.out.println("Ticketing information saved to ticket_info.json");
+            logger.info("Ticketing information saved to ticket_info.json");
         } catch (IOException e) {
-            System.out.println("Error saving ticketing information to JSON file: " + e.getMessage());
+            logger.error("Error saving ticketing information to JSON file: {} " , e.getMessage());
         }
     }
 
@@ -77,8 +82,22 @@ public class SystemConfig {
         try (FileReader reader = new FileReader("ticket_info.json")) {
             return gson.fromJson(reader, SystemConfig.class);  // Deserialize the JSON back to an object
         } catch (IOException e) {
-            System.out.println("Error loading ticketing information from JSON file: " + e.getMessage());
+            logger.error("Error loading ticketing information from JSON file: {}" ,e.getMessage());
             return null;
         }
     }
+
+    //method to save and load ticket information to JSON
+    public void saveAndLoadToJson() {
+        saveToJson();
+
+        System.out.println();
+
+        SystemConfig loadedTicketInfo = loadFromJson();
+        if (loadedTicketInfo != null) {
+            logger.info("Loaded ticketing information from JSON:");
+            logger.info(loadedTicketInfo);
+        }
+    }
+
 }

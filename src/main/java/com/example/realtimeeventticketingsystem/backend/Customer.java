@@ -1,4 +1,4 @@
-package com.example.realtimeeventticketingsystem;
+package com.example.realtimeeventticketingsystem.backend;
 
 public class Customer implements Runnable {
     private final TicketPool ticketPool;

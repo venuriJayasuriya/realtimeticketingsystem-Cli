@@ -1,10 +1,15 @@
-package com.example.realtimeeventticketingsystem;
+package com.example.realtimeeventticketingsystem.backend;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class TicketPool {
+    private static final Logger logger = LogManager.getLogger(TicketPool.class);
+
     private final List<Integer> tickets; // List to store ticket IDs
     private int maxTicketCapacity;
     private int currentTicketCount;  // Keeps track of the next ticket number to assign
@@ -22,7 +27,6 @@ public class TicketPool {
         for (int i = 1; i <= totalTickets; i++) {
             tickets.add(i);
         }
-        System.out.println();
     }
 
     // Method to add tickets to the pool
@@ -33,12 +37,13 @@ public class TicketPool {
                 int ticket = ticketIdCounter++;
                 tickets.add(ticket);// Add the ticket to the pool
                 currentTicketCount++;   // Increment the total ticket count
-                System.out.println("Ticket " + ticket + " added by vendor " + VendorId);
+                logger.info("Ticket {} added by vendor {}", ticket, VendorId);
                 notifyAll(); // Notify customers that tickets are available
             }
         } else if (!isMaxCapacityReached) {
+
             System.out.println("\n" + "----------------------------------------");
-            System.out.println("The ticket pool has reached maximum capacity.");
+            logger.warn("The ticket pool has reached maximum capacity.");
             System.out.println("----------------------------------------\n");
             isMaxCapacityReached = true; // Set flag to prevent duplicate messages
         }
@@ -48,12 +53,12 @@ public class TicketPool {
     public synchronized Integer removeTicket(int CustomerId) {
         while (tickets.isEmpty()) {
             try {
-                System.out.println("No tickets available. Customer " + CustomerId + " is waiting...");
+                logger.info("No tickets available. Customer {} is waiting...",CustomerId);
                 wait();  // Wait until tickets are available
             } catch (InterruptedException e) {
                 // Handle the interruption properly
                 Thread.currentThread().interrupt();  // Re-interrupt the current thread
-                System.out.println("Customer thread interrupted: " + e.getMessage());
+                logger.error("Customer thread interrupted: {}" , e.getMessage());
                 return null;  // Return null or handle as needed
             }
         }
@@ -63,7 +68,7 @@ public class TicketPool {
         }
 
         Integer ticket = tickets.remove(0);
-        System.out.println("Ticket " + ticket + " sold to customer " + CustomerId);
+        logger.info("Ticket {} sold to customer {}", ticket, CustomerId);
         return ticket;
     }
 
@@ -73,7 +78,7 @@ public class TicketPool {
             if (!soldOut) { // Print the message only once
                 soldOut = true;
                 System.out.println("\n" + "----------------------------------------");
-                System.out.println("All tickets are sold out.");
+                logger.info("All tickets are sold out.");
                 System.out.println("----------------------------------------");
                 return true;
             }

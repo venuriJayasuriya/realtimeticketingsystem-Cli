@@ -1,7 +1,7 @@
 {
-  "maxTicketCapacity": 12,
-  "totalTickets": 2,
-  "vendorCount": 2,
+  "maxTicketCapacity": 100,
+  "totalTickets": 21,
+  "vendorCount": 4,
   "ticketReleaseRate": 2,
-  "customerRetrievalRate": 2
+  "customerRetrievalRate": 3
 }
