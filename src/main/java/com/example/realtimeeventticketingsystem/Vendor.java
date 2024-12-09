@@ -13,15 +13,18 @@ public class Vendor implements Runnable {
 
     @Override
     public void run() {
-        while (!ticketPool.isTicketSoldOut()) {
-            ticketPool.addTickets(vendorId);  // Add a ticket to the pool
-            try {
-                Thread.sleep(ticketReleaseRate * 1000); // Convert seconds to milliseconds here
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                System.out.println("Vendor thread interrupted: " + e.getMessage());
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                synchronized (ticketPool) {
+                    if (ticketPool.isTicketSoldOut())
+                        break;
+                    ticketPool.addTickets(vendorId);  // Add a ticket to the pool
+                }
+                Thread.sleep(1000/ticketReleaseRate); // Convert seconds to milliseconds here
             }
+        } catch (InterruptedException e) {
+            // Expected interruption, just exit the thread
+            Thread.currentThread().interrupt();
         }
-        System.out.println("Vendor " + vendorId + " has finished releasing tickets.");
     }
 }

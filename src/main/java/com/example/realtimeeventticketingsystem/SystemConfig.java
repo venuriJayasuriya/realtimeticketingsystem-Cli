@@ -10,6 +10,7 @@ import java.io.IOException;
 public class SystemConfig {
     private int maxTicketCapacity; //the maximum number of tickets the event can hold
     private int totalTickets; //the number of tickets at the beginning
+    private int vendorCount;
     private int ticketReleaseRate; //rate at which the vendors will release tickets
     private int customerRetrievalRate; //rate at which the customers will retrieve tickets
 
@@ -17,8 +18,14 @@ public class SystemConfig {
 
     }
 
+    public void setMaxTicketCapacity(int maxTicketCapacity) {
+        this.maxTicketCapacity = maxTicketCapacity;
+    }
     public void setTotalTickets(int totalTickets) {
         this.totalTickets = totalTickets;
+    }
+    public void setVendorCount(int vendorCount) {
+        this.vendorCount = vendorCount;
     }
     public void setTicketReleaseRate(int ticketReleaseRate) {
         this.ticketReleaseRate = ticketReleaseRate;
@@ -26,12 +33,15 @@ public class SystemConfig {
     public void setCustomerRetrievalRate(int customerRetrievalRate) {
         this.customerRetrievalRate = customerRetrievalRate;
     }
-    public void setMaxTicketCapacity(int maxTicketCapacity) {
-        this.maxTicketCapacity = maxTicketCapacity;
-    }
 
+    public int getMaxTicketCapacity() {
+        return maxTicketCapacity;
+    }
     public int getTotalTickets() {
         return totalTickets;
+    }
+    public int getVendorCount() {
+        return vendorCount;
     }
     public int getTicketReleaseRate() {
         return ticketReleaseRate;
@@ -39,18 +49,17 @@ public class SystemConfig {
     public int getCustomerRetrievalRate() {
         return customerRetrievalRate;
     }
-    public int getMaxTicketCapacity() {
-        return maxTicketCapacity;
-    }
+
 
     @Override
     public String toString() {
-        return "Ticket information {" +
-                "totalTickets=" + totalTickets +
-                ", ticketReleaseRate=" + ticketReleaseRate +
-                ", customerRetrievalRate=" + customerRetrievalRate +
-                ", maxTicketCapacity=" + maxTicketCapacity +
-                '}';
+        return  "-------------------------------------------------------------\nTicket information of the Event\n-------------------------------------------------------------\n"+
+                "Maximum Ticket Capacity event can hold             = " + maxTicketCapacity +
+                "\nTotal Tickets in the Ticket pool at the beginning = " + totalTickets +
+                "\nNumber of Vendors selling tickets                 = " + vendorCount +
+                "\nTicket Released Rate by Vendors(in seconds)       = " + ticketReleaseRate +
+                "\nTicket Retrieval Rate by Customers(in seconds)    = " + customerRetrievalRate +
+                "\n-------------------------------------------------------------\n";
     }
 
     public void saveToJson() {

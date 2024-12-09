@@ -13,15 +13,24 @@ public class Customer implements Runnable {
 
     @Override
     public void run() {
-        while (!ticketPool.isTicketSoldOut()) {
-            Integer ticket = ticketPool.removeTicket(customerId); // Try to remove a ticket
-            try {
-                Thread.sleep(customerRetrievalRate * 1000); // Convert seconds to milliseconds here
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                System.out.println("Customer thread interrupted: " + e.getMessage());
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                synchronized (ticketPool) {
+                    if (ticketPool.isTicketSoldOut() && ticketPool.isSoldOut())
+                        break;
+
+                    Integer ticket = ticketPool.removeTicket(customerId);
+                    if (ticket == null) {
+                        if (ticketPool.isSoldOut())
+                            break;
+                        ticketPool.wait(); // Wait for new tickets or sold-out notification
+                    }
+                }
+                Thread.sleep(1000/customerRetrievalRate);
             }
+        } catch (InterruptedException e) {
+            // Expected interruption, just exit the thread
+            Thread.currentThread().interrupt();
         }
-        System.out.println("Customer " + customerId + " finished purchasing tickets.");
     }
 }
