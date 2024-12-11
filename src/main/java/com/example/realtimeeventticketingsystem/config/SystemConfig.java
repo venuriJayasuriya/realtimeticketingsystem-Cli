@@ -1,15 +1,17 @@
-package com.example.realtimeeventticketingsystem.backend;
+package com.example.realtimeeventticketingsystem.config;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.springframework.stereotype.Component;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+@Component
 public class SystemConfig {
     private static final Logger logger = LogManager.getLogger(SystemConfig.class);
 

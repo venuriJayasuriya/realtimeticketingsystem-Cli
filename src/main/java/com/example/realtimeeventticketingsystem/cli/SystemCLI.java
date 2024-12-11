@@ -1,6 +1,6 @@
 package com.example.realtimeeventticketingsystem.cli;
 
-import com.example.realtimeeventticketingsystem.backend.SystemConfig;
+import com.example.realtimeeventticketingsystem.config.SystemConfig;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,4 +1,4 @@
-package com.example.realtimeeventticketingsystem.backend;
+package com.example.realtimeeventticketingsystem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

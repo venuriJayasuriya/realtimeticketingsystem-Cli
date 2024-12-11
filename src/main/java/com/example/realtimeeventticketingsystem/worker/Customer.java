@@ -1,11 +1,17 @@
-package com.example.realtimeeventticketingsystem.backend;
+package com.example.realtimeeventticketingsystem.worker;
 
+import com.example.realtimeeventticketingsystem.model.TicketPool;
+import org.springframework.stereotype.Component;
+
+@Component
 public class Customer implements Runnable {
-    private final TicketPool ticketPool;
-    private final int customerRetrievalRate;
-    private final int customerId;
+    private TicketPool ticketPool;
+    private int customerRetrievalRate;
+    private int customerId;
 
-    public Customer(TicketPool ticketPool, int customerRetrievalRate, int customerId) {
+    public Customer() {}
+
+    public void initialize(TicketPool ticketPool, int customerRetrievalRate, int customerId) {
         this.ticketPool = ticketPool;
         this.customerRetrievalRate = customerRetrievalRate;
         this.customerId = customerId;

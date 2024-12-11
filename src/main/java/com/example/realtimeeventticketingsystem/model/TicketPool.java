@@ -1,12 +1,14 @@
-package com.example.realtimeeventticketingsystem.backend;
+package com.example.realtimeeventticketingsystem.model;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+@Component
 public class TicketPool {
     private static final Logger logger = LogManager.getLogger(TicketPool.class);
 
@@ -16,6 +18,14 @@ public class TicketPool {
     private int ticketIdCounter; // Counter to ensure unique ticket IDs
     private volatile boolean soldOut = false; // Signal flag for thread termination
     private boolean isMaxCapacityReached = false;
+
+    // Default constructor for Spring
+    public TicketPool() {
+        this.tickets = Collections.synchronizedList(new LinkedList<>());
+        this.maxTicketCapacity = 100; // default value
+        this.currentTicketCount = 0;
+        this.ticketIdCounter = 1;
+    }
 
     public TicketPool(int maxCapacity, int totalTickets) {
         this.maxTicketCapacity = maxCapacity;
@@ -104,5 +114,7 @@ public class TicketPool {
         public boolean isSoldOut() {
             return soldOut;
         }
+        public int getCurrentTicketCount() { return currentTicketCount; }
+        public int getMaxTicketCapacity() { return maxTicketCapacity; }
 
 }

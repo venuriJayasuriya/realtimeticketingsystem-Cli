@@ -1,12 +1,21 @@
-package com.example.realtimeeventticketingsystem.backend;
+package com.example.realtimeeventticketingsystem.controller;
 
+import com.example.realtimeeventticketingsystem.config.SystemConfig;
+import com.example.realtimeeventticketingsystem.model.TicketPool;
+import com.example.realtimeeventticketingsystem.worker.Customer;
+import com.example.realtimeeventticketingsystem.worker.Vendor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Component
 public class SystemController {
     private static final Logger logger = LogManager.getLogger(SystemController.class);
     private final TicketPool ticketPool;
@@ -14,13 +23,17 @@ public class SystemController {
     private final List<Thread> vendorThreads;
     private final List<Thread> customerThreads;
     private final AtomicBoolean isRunning;
+    private final ApplicationContext applicationContext;
 
-    public SystemController(SystemConfig config, TicketPool ticketPool) {
+
+    @Autowired
+    public SystemController(SystemConfig config, TicketPool ticketPool, ApplicationContext applicationContext) {
         this.config = config;
         this.ticketPool = new TicketPool(config.getMaxTicketCapacity(), config.getTotalTickets());
         this.vendorThreads = new ArrayList<>();
         this.customerThreads = new ArrayList<>();
         this.isRunning = new AtomicBoolean(false);
+        this.applicationContext = applicationContext;
     }
 
     public void start() {
@@ -35,18 +48,22 @@ public class SystemController {
 
             // Create and start vendor threads
             for (int i = 1; i <= config.getVendorCount(); i++) {
-                Thread vendor = new Thread(new Vendor(ticketPool, config.getTicketReleaseRate(), i));
-                vendorThreads.add(vendor);
-                vendor.start();
+                Vendor vendor = applicationContext.getBean(Vendor.class);
+                vendor.initialize(ticketPool, config.getTicketReleaseRate(), i);
+                Thread vendorThread = new Thread(vendor);
+                vendorThreads.add(vendorThread);
+                vendorThread.start();
             }
 
             // Generate random number of customers (1 to 10)
             int customerCount = new Random().nextInt(10) + 1; // 1 to 10
             // Create and start customer threads
             for (int i = 1; i <= customerCount; i++) {
-                Thread customer = new Thread(new Customer(ticketPool, config.getCustomerRetrievalRate(), i));
-                customerThreads.add(customer);
-                customer.start();
+                Customer customer = applicationContext.getBean(Customer.class);
+                customer.initialize(ticketPool, config.getCustomerRetrievalRate(), i);
+                Thread customerThread = new Thread(customer);
+                customerThreads.add(customerThread);
+                customerThread.start();
             }
 
             // Monitor thread to check for ticket sell-out
@@ -100,13 +117,13 @@ public class SystemController {
                 }
             }
 
-            // Clear the threads lists
-            vendorThreads.clear();
-            customerThreads.clear();
-
             System.out.println("\n" + "----------------------------------------");
             logger.info("Ticket handling system stopped.");
             System.out.println("----------------------------------------");
+
+            // Clear the threads lists
+            vendorThreads.clear();
+            customerThreads.clear();
 
         } else {
             System.out.println();

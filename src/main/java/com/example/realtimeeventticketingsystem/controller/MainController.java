@@ -113,8 +113,4 @@ public class MainController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/api/system/logs")
-    public ResponseEntity<List<String>> getLogs() {
-        return ResponseEntity.ok(ticketPool.getLogs());
-    }
 }
