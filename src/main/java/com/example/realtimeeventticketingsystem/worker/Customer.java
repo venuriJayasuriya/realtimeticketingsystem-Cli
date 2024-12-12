@@ -9,6 +9,7 @@ public class Customer implements Runnable {
     private int customerRetrievalRate;
     private int customerId;
 
+    // Default constructor for Spring
     public Customer() {}
 
     public void initialize(TicketPool ticketPool, int customerRetrievalRate, int customerId) {

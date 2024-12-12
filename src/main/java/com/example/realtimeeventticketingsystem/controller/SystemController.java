@@ -29,7 +29,7 @@ public class SystemController {
     @Autowired
     public SystemController(SystemConfig config, TicketPool ticketPool, ApplicationContext applicationContext) {
         this.config = config;
-        this.ticketPool = new TicketPool(config.getMaxTicketCapacity(), config.getTotalTickets());
+        this.ticketPool = ticketPool;
         this.vendorThreads = new ArrayList<>();
         this.customerThreads = new ArrayList<>();
         this.isRunning = new AtomicBoolean(false);

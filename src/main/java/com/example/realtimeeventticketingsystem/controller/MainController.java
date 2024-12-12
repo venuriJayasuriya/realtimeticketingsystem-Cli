@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -31,8 +30,8 @@ public class MainController {
                 ticketPool.getCurrentTicketCount(),
                 ticketPool.getMaxTicketCapacity(),
                 ticketPool.isSoldOut(),
-                ticketPool.getCurrentTicketCount(),  // available tickets
-                ticketPool.getMaxTicketCapacity() - ticketPool.getCurrentTicketCount()  // total sold
+                ticketPool.getAvailableTickets(),  // Use the method to get available tickets
+                ticketPool.getTotalSold()          // Use the method to get total sold
         );
         return ResponseEntity.ok(status);
     }

@@ -18,6 +18,7 @@ public class TicketPool {
     private int ticketIdCounter; // Counter to ensure unique ticket IDs
     private volatile boolean soldOut = false; // Signal flag for thread termination
     private boolean isMaxCapacityReached = false;
+    private int totalTicketsSold = 0;
 
     // Default constructor for Spring
     public TicketPool() {
@@ -25,6 +26,7 @@ public class TicketPool {
         this.maxTicketCapacity = 100; // default value
         this.currentTicketCount = 0;
         this.ticketIdCounter = 1;
+        this.totalTicketsSold = 0;
     }
 
     public TicketPool(int maxCapacity, int totalTickets) {
@@ -32,6 +34,7 @@ public class TicketPool {
         this.tickets = Collections.synchronizedList(new LinkedList<>());
         this.currentTicketCount = totalTickets;  // Start ticket ID at 1
         this.ticketIdCounter = totalTickets + 1;// Start from the next ticket ID after the initial tickets
+        this.totalTicketsSold = 0;
 
         // Add the initial tickets to the pool
         for (int i = 1; i <= totalTickets; i++) {
@@ -59,9 +62,11 @@ public class TicketPool {
         }
     }
 
+//    private int totalTicketsSold = 0;
+
     // Method to remove a ticket from the pool
     public synchronized Integer removeTicket(int CustomerId) {
-        while (tickets.isEmpty()) {
+        while (tickets.isEmpty() && !soldOut) {
             try {
                 logger.info("No tickets available. Customer {} is waiting...",CustomerId);
                 wait();  // Wait until tickets are available
@@ -73,14 +78,21 @@ public class TicketPool {
             }
         }
 
-        if (soldOut) {
+        if (soldOut || tickets.isEmpty()) {
             return null;
         }
 
         Integer ticket = tickets.remove(0);
+        totalTicketsSold++;  // Increment total sold tickets
         logger.info("Ticket {} sold to customer {}", ticket, CustomerId);
+        // Check if all tickets are sold
+        if (totalTicketsSold >= maxTicketCapacity) {
+            soldOut = true;
+        }
         return ticket;
     }
+
+
 
     // Method to check if all tickets have been sold
     public synchronized boolean isTicketSoldOut() {
@@ -105,16 +117,31 @@ public class TicketPool {
         this.ticketIdCounter = totalTickets + 1;
         this.soldOut = false;
         this.isMaxCapacityReached = false;
+        this.totalTicketsSold = 0;
 
         // Add the initial tickets to the pool
         for (int i = 1; i <= totalTickets; i++) {
             tickets.add(i);
         }
     }
-        public boolean isSoldOut() {
-            return soldOut;
-        }
-        public int getCurrentTicketCount() { return currentTicketCount; }
-        public int getMaxTicketCapacity() { return maxTicketCapacity; }
 
+    public int getCurrentTicketCount() {
+        return currentTicketCount;
+    }
+
+    public int getMaxTicketCapacity() {
+        return maxTicketCapacity;
+    }
+
+    public synchronized int getAvailableTickets() {
+        return tickets.size();
+    }
+
+    public synchronized int getTotalSold() {
+        return totalTicketsSold;
+    }
+
+    public boolean isSoldOut() {
+        return soldOut;
+    }
 }

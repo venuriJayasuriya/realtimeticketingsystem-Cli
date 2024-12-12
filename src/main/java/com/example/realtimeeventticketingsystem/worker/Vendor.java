@@ -9,6 +9,7 @@ public class Vendor implements Runnable {
     private int ticketReleaseRate;
     private int vendorId;
 
+    // Default constructor for Spring
     public Vendor() {}
 
     public void initialize(TicketPool ticketPool, int ticketReleaseRate, int vendorId) {
